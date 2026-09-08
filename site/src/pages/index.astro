@@ -1,0 +1,27 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+
+const articles = (await getCollection("articles")).sort(
+  (a, b) => Date.parse(b.data.date) - Date.parse(a.data.date),
+);
+---
+
+<Base title="Latest Insider Trades">
+  <h1>Latest Insider Trades</h1>
+  {articles.length === 0 && <p>No articles published yet.</p>}
+  <ul style="list-style: none; padding: 0;">
+    {
+      articles.map((a) => (
+        <li style="margin-bottom: 1.25rem;">
+          <a href={`/articles/${a.data.slug}/`} style="font-weight: 600;">
+            {a.data.title}
+          </a>
+          <div style="font-size: 0.85rem; color: #666;">
+            {a.data.ticker} · {a.data.date}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

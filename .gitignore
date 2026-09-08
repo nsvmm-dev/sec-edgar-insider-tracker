@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Runtime output of the pipeline (per-day working data)
+/output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Node / site
+node_modules/
+site/dist/
+site/.astro/
+
+# OS
+.DS_Store
+Thumbs.db

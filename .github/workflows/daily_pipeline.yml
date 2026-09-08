@@ -1,0 +1,64 @@
+name: Daily insider-trade pipeline
+
+# Phase 2: run unattended once per day, after the US market close.
+# 01:30 UTC ~= 21:30 US Eastern (EDT) / 20:30 (EST). SEC publishes the day's
+# filings through the evening; adjust if you see missed filings.
+on:
+  schedule:
+    - cron: "30 1 * * 2-6" # Tue-Sat UTC == Mon-Fri evening US Eastern
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Target date YYYY-MM-DD (blank = today UTC)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-pipeline
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-opus-5' }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          MIN_TOTAL_VALUE_USD: ${{ vars.MIN_TOTAL_VALUE_USD || '100000' }}
+        run: |
+          python -m agents.orchestrator \
+            --date "${{ github.event.inputs.date }}" \
+            --stages fetch,write,qa,publish
+
+      - name: Commit published articles
+        run: |
+          git config user.name  "insider-tracker-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add site/src/content/articles data/published_index.json
+          if git diff --cached --quiet; then
+            echo "No new articles to publish."
+          else
+            git commit -m "Daily pipeline: publish articles ($(date -u +%F))"
+            git push
+          fi
+
+      - name: Upload run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-output
+          path: output/
+          retention-days: 14

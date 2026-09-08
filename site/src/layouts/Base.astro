@@ -1,0 +1,37 @@
+---
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ?? "Insider Trades"}</title>
+  </head>
+  <body style="font-family: system-ui, sans-serif; max-width: 720px; margin: 0 auto; padding: 1.5rem; line-height: 1.6;">
+    <header style="border-bottom: 1px solid #ddd; margin-bottom: 1.5rem;">
+      <a href="/" style="text-decoration: none; font-weight: 700;">Insider Trades</a>
+      <nav style="float: right;">
+        <a href="/">Latest</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer style="border-top: 1px solid #ddd; margin-top: 3rem; padding-top: 1rem; font-size: 0.85rem; color: #555;">
+      <p>
+        This is an independent information source. It is <strong>not affiliated
+        with, endorsed by, or connected to</strong> the U.S. Securities and
+        Exchange Commission or any U.S. government agency. Filing data is
+        retrieved from the public SEC EDGAR system.
+      </p>
+      <p>
+        Nothing on this site is investment advice. Insider transactions do not
+        necessarily indicate future stock performance.
+      </p>
+    </footer>
+  </body>
+</html>

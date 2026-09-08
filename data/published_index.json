@@ -1,0 +1,18 @@
+{
+  "published": {
+    "https://www.sec.gov/Archives/edgar/data/1141391/000114139126000104/0001141391-26-000104-index.htm": {
+      "slug": "2026-09-02-ma-sale-1ef25e69",
+      "title": "Sachin J. Mehra (Chief Business Officer) Sells $1.9 Million in Mastercard Stock",
+      "path": "G:\\マイドライブ\\Auto_Profit_24\\10_SEC_EDGAR_Sum\\site\\src\\content\\articles\\2026-09-02-ma-sale-1ef25e69.md",
+      "published_at": "2026-09-08T13:28:39.994677+00:00",
+      "filing_date": "2026-09-02"
+    },
+    "https://www.sec.gov/Archives/edgar/data/320193/000114036126035636/0001140361-26-035636-index.htm": {
+      "slug": "2026-09-01-aapl-sale-3d88e9a1",
+      "title": "Jennifer Newstead (SVP, GC and Government Affairs) Sells $456,000 in Apple Inc. Stock",
+      "path": "G:\\マイドライブ\\Auto_Profit_24\\10_SEC_EDGAR_Sum\\site\\src\\content\\articles\\2026-09-01-aapl-sale-3d88e9a1.md",
+      "published_at": "2026-09-08T13:28:40.041410+00:00",
+      "filing_date": "2026-09-01"
+    }
+  }
+}
