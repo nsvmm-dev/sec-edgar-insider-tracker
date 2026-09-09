@@ -104,23 +104,24 @@ py tests/test_form4_parser.py       # no pytest needed
 ## Deployment (GitHub Pages + custom domain)
 
 The site is a static Astro build hosted on **GitHub Pages** from the **project
-repo** `nsvmm-dev/sec-edgar-insider-tracker`, served on a **custom apex domain**.
-Because it's a custom domain the site sits at the domain root and
-`astro.config.mjs` needs no `base`.
+repo** `nsvmm-dev/sec-edgar-insider-tracker`, served on the **custom apex domain
+`decode-slang.com`**. Because it's a custom domain the site sits at the domain
+root and `astro.config.mjs` needs no `base`.
 
-> **The domain is still a placeholder (`example.com`).** When it's chosen, update
-> all three: `site/astro.config.mjs` (`site:`), `site/public/CNAME`, and
-> `site/public/robots.txt` (`Sitemap:` line).
+> To move to a different domain later, update all three —
+> `site/astro.config.mjs` (`site:`), `site/public/CNAME`,
+> `site/public/robots.txt` (`Sitemap:` line) — then change it in *Settings →
+> Pages* and update DNS.
 
 One-time setup:
 
-1. Create the GitHub repo `nsvmm-dev/sec-edgar-insider-tracker` (**public** — free
-   Pages + free Actions minutes) and push.
+1. Push this repo to `nsvmm-dev/sec-edgar-insider-tracker` (**public** — free
+   Pages + free Actions minutes). *(done)*
 2. *Settings → Pages → Build and deployment → Source* = **GitHub Actions**.
-3. *Settings → Pages → Custom domain* — enter the apex domain, save, then tick
+3. *Settings → Pages → Custom domain* → `decode-slang.com`, save, then tick
    **Enforce HTTPS** once the cert is issued. (`site/public/CNAME` keeps the
    setting from being wiped on redeploy.)
-4. DNS at the domain's provider — apex `A` records to GitHub Pages:
+4. DNS at the `decode-slang.com` provider — apex `A` records to GitHub Pages:
    `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    (optionally the matching `AAAA` records for IPv6). Add
    `CNAME www → nsvmm-dev.github.io` too so `www` redirects to the apex.
