@@ -1,7 +1,7 @@
 {
   "_note": "Full S&P 500 constituent -> CIK map. Rebuild with data/build_sp500_ciks.py.",
   "_source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
-  "_updated": "2026-09-08",
+  "_updated": "2026-09-09",
   "companies": [
     {
       "ticker": "A",

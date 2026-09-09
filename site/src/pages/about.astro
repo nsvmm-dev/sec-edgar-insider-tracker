@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="About"
+  description="What Insider Trades is, where its data comes from, and how it is produced."
+>
+  <div class="static-page">
+    <h1>About</h1>
+
+    <p>
+      <strong>Insider Trades</strong> publishes short, plain-English news briefs
+      about insider transactions at S&P 500 companies. Each brief is built from a
+      single <a
+        href="https://www.sec.gov/about/forms/form4data.pdf"
+        rel="noopener"
+        target="_blank">SEC Form 4</a
+      > filing — the report a company's officers, directors and large shareholders
+      must submit when they buy or sell that company's stock.
+    </p>
+
+    <h2>Where the data comes from</h2>
+    <p>
+      All figures — names, job titles, share counts, prices and dates — are taken
+      directly from filings on the public
+      <a href="https://www.sec.gov/edgar" rel="noopener" target="_blank"
+        >SEC EDGAR</a
+      > system. We do not estimate or fill in missing values; when a filing does not
+      report a number, the brief leaves it out.
+    </p>
+
+    <h2>How briefs are produced</h2>
+    <p>
+      The pipeline is automated. Filings are parsed by code, each brief is
+      drafted by a language model from the parsed record only, and a second
+      automated pass checks every figure back against the filing and blocks
+      briefs that add outside facts, speculate about motives, or read as
+      investment advice. A mandatory disclaimer is appended to every brief.
+    </p>
+
+    <h2>What this site is not</h2>
+    <p>
+      This is an independent information source. It is <strong
+        >not affiliated with, endorsed by, or connected to</strong
+      > the U.S. Securities and Exchange Commission or any government agency.
+      Nothing here is investment advice, and an insider buying or selling stock
+      does not predict how that stock will perform. See our
+      <a href="/terms/">Terms</a>, <a href="/disclosure/">Disclosure</a> and
+      <a href="/privacy/">Privacy Policy</a>.
+    </p>
+
+    <h2>Corrections</h2>
+    <p>
+      If a brief misstates something in the underlying filing, email
+      <a href="mailto:naka.kn007@gmail.com">naka.kn007@gmail.com</a> with a link
+      to the page and we will correct or remove it.
+    </p>
+  </div>
+</Base>

@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 const {
   title,
   description = "Plain-English news briefs on S&P 500 insider transactions (SEC Form 4).",
@@ -7,6 +9,7 @@ const {
 const siteName = "Insider Trades";
 const pageTitle = title ? `${title} · ${siteName}` : siteName;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -33,29 +36,39 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
   </head>
-  <body style="font-family: system-ui, sans-serif; max-width: 720px; margin: 0 auto; padding: 1.5rem; line-height: 1.6;">
-    <header style="border-bottom: 1px solid #ddd; margin-bottom: 1.5rem;">
-      <a href="/" style="text-decoration: none; font-weight: 700;">Insider Trades</a>
-      <nav style="float: right;">
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">Insider Trades</a>
+      <nav>
         <a href="/">Latest</a>
+        <a href="/about/">About</a>
       </nav>
     </header>
 
-    <main>
+    <main class="wrap">
       <slot />
     </main>
 
-    <footer style="border-top: 1px solid #ddd; margin-top: 3rem; padding-top: 1rem; font-size: 0.85rem; color: #555;">
+    <footer class="site-footer">
+      <nav>
+        <a href="/about/">About</a>
+        <a href="/disclosure/">Disclosure</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/contact/">Contact</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
       <p>
-        This is an independent information source. It is <strong>not affiliated
-        with, endorsed by, or connected to</strong> the U.S. Securities and
-        Exchange Commission or any U.S. government agency. Filing data is
-        retrieved from the public SEC EDGAR system.
+        Independent information source — <strong>not affiliated with, endorsed
+        by, or connected to</strong> the U.S. Securities and Exchange Commission
+        or any government agency. Filing data is retrieved from the public SEC
+        EDGAR system.
       </p>
       <p>
         Nothing on this site is investment advice. Insider transactions do not
         necessarily indicate future stock performance.
       </p>
+      <p>© {year} Insider Trades</p>
     </footer>
   </body>
 </html>

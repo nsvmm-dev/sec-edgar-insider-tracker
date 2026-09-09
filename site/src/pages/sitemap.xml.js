@@ -1,12 +1,21 @@
 import { getCollection } from "astro:content";
 
 // Plain sitemap at /sitemap.xml. `context.site` comes from astro.config.mjs.
+const STATIC_PATHS = [
+  "/",
+  "/about/",
+  "/disclosure/",
+  "/privacy/",
+  "/terms/",
+  "/contact/",
+];
+
 export async function GET(context) {
   const base = context.site.href.replace(/\/$/, "");
   const articles = await getCollection("articles");
 
   const urls = [
-    `${base}/`,
+    ...STATIC_PATHS.map((p) => `${base}${p}`),
     ...articles.map((a) => `${base}/articles/${a.slug}/`),
   ];
 

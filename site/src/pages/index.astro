@@ -9,16 +9,22 @@ const articles = (await getCollection("articles")).sort(
 
 <Base title="Latest Insider Trades">
   <h1>Latest Insider Trades</h1>
-  {articles.length === 0 && <p>No articles published yet.</p>}
-  <ul style="list-style: none; padding: 0;">
+  <p class="muted">
+    Short, fact-checked briefs on S&P 500 insider transactions, built from SEC
+    Form 4 filings.
+  </p>
+
+  {articles.length === 0 && <p class="muted">No articles published yet.</p>}
+
+  <ul class="article-list">
     {
       articles.map((a) => (
-        <li style="margin-bottom: 1.25rem;">
-          <a href={`/articles/${a.slug}/`} style="font-weight: 600;">
+        <li>
+          <a class="title" href={`/articles/${a.slug}/`}>
             {a.data.title}
           </a>
-          <div style="font-size: 0.85rem; color: #666;">
-            {a.data.ticker} · {a.data.date}
+          <div class="muted">
+            {[a.data.ticker, a.data.date].filter(Boolean).join(" · ")}
           </div>
         </li>
       ))
