@@ -1,0 +1,49 @@
+name: CI
+
+# Runs the parser/unit tests and a full site build on code changes. Content-only
+# commits from the daily pipeline (new article Markdown, the publish ledger) are
+# ignored so the bot's own commits don't trigger CI.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "site/src/content/articles/**"
+      - "data/published_index.json"
+      - "output/**"
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          for t in tests/test_*.py; do
+            echo "== $t =="
+            python "$t"
+          done
+
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Build site
+        working-directory: site
+        run: |
+          npm ci
+          npm run build

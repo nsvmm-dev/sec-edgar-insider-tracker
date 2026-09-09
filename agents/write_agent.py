@@ -42,8 +42,8 @@ Hard rules:
   reporting thresholds, or Forms 3 and 5. One plain sentence naming the source
   is the most you may say about it.
 
-Length: aim for 250-330 words in the body. Count the words. A brief below 210
-words or above 370 words is not acceptable.
+Length: aim for 260-340 words in the body. Count the words. Never go below 230
+or above 370 — a brief outside 210-380 will be rejected downstream.
 
 Output format — return exactly this and nothing else:
 
@@ -63,8 +63,9 @@ Body structure (three paragraphs):
      share count, price per share, total value, and the transaction date. You
      may add one short clause defining the transaction code (e.g. "code S, an
      open-market sale").
-  2. Two to four sentences on what the company does and how it earns revenue,
-     at a general level.
+  2. Three to five sentences on what the company does and how it earns revenue,
+     at a general level. This is the paragraph that gives the brief its body —
+     do not make it thin.
   3. Exactly one sentence: state that the information comes from a Form 4
      insider-transaction report filed with the SEC for this issuer. Then stop —
      no explanation of the form, its rules, or related forms.
