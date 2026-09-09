@@ -1,6 +1,8 @@
 name: Daily insider-trade pipeline
 
-# Phase 2: run unattended once per day, after the US market close.
+# Phase 2: run unattended once per day, after the US market close, then rebuild
+# and deploy the static site to GitHub Pages.
+#
 # 01:30 UTC ~= 21:30 US Eastern (EDT) / 20:30 (EST). SEC publishes the day's
 # filings through the evening; adjust if you see missed filings.
 on:
@@ -13,7 +15,9 @@ on:
         required: false
 
 permissions:
-  contents: write
+  contents: write # commit published articles back to the repo
+  pages: write # deploy to GitHub Pages
+  id-token: write # OIDC token for the Pages deployment
 
 concurrency:
   group: daily-pipeline
@@ -62,3 +66,32 @@ jobs:
           name: pipeline-output
           path: output/
           retention-days: 14
+
+      # --- Build the static site from the just-updated working tree ---
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Build site
+        working-directory: site
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: run
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

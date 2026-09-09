@@ -5,7 +5,7 @@ import Base from "../../layouts/Base.astro";
 export async function getStaticPaths() {
   const articles = await getCollection("articles");
   return articles.map((entry) => ({
-    params: { slug: entry.data.slug },
+    params: { slug: entry.slug },
     props: { entry },
   }));
 }
@@ -13,9 +13,14 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const d = entry.data;
+
+const verb = d.transaction_type === "purchase" ? "bought" : "sold";
+const description = d.filer
+  ? `${d.filer} ${verb} ${d.company ?? ""} (${d.ticker ?? ""}) stock on ${d.date}, per an SEC Form 4 filing.`
+  : undefined;
 ---
 
-<Base title={d.title}>
+<Base title={d.title} description={description}>
   <article>
     <h1>{d.title}</h1>
     <p style="font-size: 0.85rem; color: #666;">

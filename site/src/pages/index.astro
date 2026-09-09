@@ -14,7 +14,7 @@ const articles = (await getCollection("articles")).sort(
     {
       articles.map((a) => (
         <li style="margin-bottom: 1.25rem;">
-          <a href={`/articles/${a.data.slug}/`} style="font-weight: 600;">
+          <a href={`/articles/${a.slug}/`} style="font-weight: 600;">
             {a.data.title}
           </a>
           <div style="font-size: 0.85rem; color: #666;">

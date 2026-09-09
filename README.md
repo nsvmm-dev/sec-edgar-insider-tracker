@@ -94,10 +94,36 @@ py tests/test_form4_parser.py       # no pytest needed
 
 - **Phase 1** — stages 1-4, run locally via `orchestrator.py`. ✅ implemented.
 - **Phase 2** — `.github/workflows/daily_pipeline.yml` runs it daily after the US
-  close and commits new articles. Set repo secrets `ANTHROPIC_API_KEY`,
-  `SEC_USER_AGENT`.
+  close, commits new articles, then builds `site/` and deploys it to GitHub
+  Pages. See **Deployment** below.
 - **Phase 3** — `social_agent.py` / `newsletter_agent.py` (drafts only).
 - **Phase 4** — ads / paid tier: not started.
+
+---
+
+## Deployment (GitHub Pages)
+
+The site is a static Astro build hosted on **GitHub Pages**, served from the repo
+`Naka-SVMM.github.io` at `https://naka-svmm.github.io/` (domain root, so
+`astro.config.mjs` needs no `base`). A custom domain can be added later via
+*Settings → Pages* without code changes.
+
+One-time setup:
+
+1. Push this repo to GitHub as `Naka-SVMM/Naka-SVMM.github.io` (**public** — free
+   Pages + free Actions minutes).
+2. *Settings → Pages → Build and deployment → Source* = **GitHub Actions**.
+3. *Settings → Secrets and variables → Actions*:
+   - Secrets: `ANTHROPIC_API_KEY`, `SEC_USER_AGENT`
+   - Variables (optional): `ANTHROPIC_MODEL`, `MIN_TOTAL_VALUE_USD`
+
+After that, every scheduled run (and every manual *Run workflow*) regenerates and
+redeploys the site. `daily_pipeline.yml` builds the site in the same job that
+runs the pipeline — it does **not** rely on the push triggering a second
+workflow (a `GITHUB_TOKEN` push doesn't, by design).
+
+The sitemap (`/sitemap.xml`) and RSS feed (`/rss.xml`) are hand-rolled endpoints
+in `site/src/pages/`, not integrations, to avoid Astro-major-version coupling.
 
 ---
 

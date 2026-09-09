@@ -15,7 +15,6 @@ const articles = defineCollection({
     price_per_share: z.number().nullable().optional(),
     total_value: z.number().nullable().optional(),
     source_url: z.string().url(),
-    slug: z.string(),
     template: z.string().optional(),
     generated_by: z.string().optional(),
   }),

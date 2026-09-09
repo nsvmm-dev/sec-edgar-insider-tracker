@@ -110,7 +110,9 @@ def write_article(record: dict) -> tuple[dict, str]:
         "price_per_share": record.get("price_per_share"),
         "total_value": record.get("total_value"),
         "source_url": record.get("source_url"),
-        "slug": article_slug(record),
+        # NB: no "slug" key here — Astro reserves `slug` in content front matter
+        # (ContentSchemaContainsSlugError). The article file is named "<slug>.md",
+        # so Astro derives the same slug from the filename.
         "template": "insider-trade-brief",
         "generated_by": "write_agent",
     }

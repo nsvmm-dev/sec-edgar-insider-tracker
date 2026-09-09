@@ -15,6 +15,7 @@ venv/
 node_modules/
 site/dist/
 site/.astro/
+site/src/env.d.ts
 
 # OS
 .DS_Store
