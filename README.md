@@ -103,10 +103,9 @@ py tests/test_form4_parser.py       # no pytest needed
 
 ## Deployment (GitHub Pages + custom domain)
 
-The site is a static Astro build hosted on **GitHub Pages**. The
-`naka-svmm.github.io` user-site slot is used by another project, so this is a
-**project repo** (`Naka-SVMM/sec-edgar-insider-tracker`) served on a **custom
-apex domain**. Because it's a custom domain the site sits at the domain root and
+The site is a static Astro build hosted on **GitHub Pages** from the **project
+repo** `nsvmm-dev/sec-edgar-insider-tracker`, served on a **custom apex domain**.
+Because it's a custom domain the site sits at the domain root and
 `astro.config.mjs` needs no `base`.
 
 > **The domain is still a placeholder (`example.com`).** When it's chosen, update
@@ -115,7 +114,7 @@ apex domain**. Because it's a custom domain the site sits at the domain root and
 
 One-time setup:
 
-1. Create the GitHub repo `Naka-SVMM/sec-edgar-insider-tracker` (**public** — free
+1. Create the GitHub repo `nsvmm-dev/sec-edgar-insider-tracker` (**public** — free
    Pages + free Actions minutes) and push.
 2. *Settings → Pages → Build and deployment → Source* = **GitHub Actions**.
 3. *Settings → Pages → Custom domain* — enter the apex domain, save, then tick
@@ -124,7 +123,7 @@ One-time setup:
 4. DNS at the domain's provider — apex `A` records to GitHub Pages:
    `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    (optionally the matching `AAAA` records for IPv6). Add
-   `CNAME www → naka-svmm.github.io` too so `www` redirects to the apex.
+   `CNAME www → nsvmm-dev.github.io` too so `www` redirects to the apex.
 5. *Settings → Secrets and variables → Actions*:
    - Secrets: `ANTHROPIC_API_KEY`, `SEC_USER_AGENT`
    - Variables (optional): `ANTHROPIC_MODEL`, `MIN_TOTAL_VALUE_USD`

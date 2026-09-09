@@ -1,8 +1,7 @@
 import { defineConfig } from "astro/config";
 
 // Static output, deployed to GitHub Pages from the project repo
-// "Naka-SVMM/sec-edgar-insider-tracker" (the naka-svmm.github.io user-site slot
-// is taken by another project).
+// "nsvmm-dev/sec-edgar-insider-tracker".
 //
 // A custom apex domain is used, so the site is served from the domain root and
 // no `base` path is needed. `site/public/CNAME` pins the domain for the Pages
