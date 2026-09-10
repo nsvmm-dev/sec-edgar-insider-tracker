@@ -21,6 +21,7 @@ fetch ──► write ──► qa ──► publish
 | **write** | `agents/write_agent.py` | yes | One 200-400 word brief per record → `output/<date>/articles/*.md` |
 | **qa** | `agents/qa_agent.py` | yes | Fact-check each brief against its record → `output/<date>/qa.json` |
 | **publish** | `agents/publish_agent.py` | no | Copy approved, non-duplicate briefs into `site/src/content/articles/` |
+| weekly | `agents/weekly_agent.py` | no | Rank the week's biggest published trades → `site/src/content/weekly/*.md` (spec template 2). Own workflow: `weekly_summary.yml` (Sat cron) |
 | social *(Phase 3)* | `agents/social_agent.py` | yes | Draft neutral X posts for the biggest trades |
 | newsletter *(Phase 3)* | `agents/newsletter_agent.py` | yes | Draft the weekly Beehiiv digest |
 

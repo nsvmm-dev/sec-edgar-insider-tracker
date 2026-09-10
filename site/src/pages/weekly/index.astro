@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { SITE_NAME } from "../../consts.js";
+
+const items = (await getCollection("weekly")).sort(
+  (a, b) => Date.parse(b.data.week_end) - Date.parse(a.data.week_end),
+);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `Weekly Summaries · ${SITE_NAME}`,
+  url: new URL("/weekly/", Astro.site).href,
+};
+---
+
+<Base
+  title="Weekly Summaries"
+  description="Weekly round-ups of the biggest S&P 500 insider trades, ranked by value."
+  jsonLd={jsonLd}
+>
+  <h1>Weekly Summaries</h1>
+  <p class="muted">
+    Each week's largest S&P 500 insider transactions, ranked by dollar value.
+  </p>
+
+  {items.length === 0 && <p class="muted">No weekly summaries yet.</p>}
+
+  <ul class="article-list">
+    {
+      items.map((w) => (
+        <li>
+          <a class="title" href={`/weekly/${w.slug}/`}>
+            {w.data.title}
+          </a>
+          <div class="muted">
+            {w.data.week_start} – {w.data.week_end}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

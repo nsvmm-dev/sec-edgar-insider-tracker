@@ -40,3 +40,15 @@ export function titleCaseCompany(name) {
 function cap(w) {
   return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
 }
+
+const ACTOR_RE =
+  /^(.*?)(?:\s+\([^)]*\))?\s+(?:Buys?|Sells?|Bought|Sold|Purchases?|Acquires?)\b/i;
+
+/**
+ * Pull the person/entity name from a "<Name> (<role>) Sells ..." headline.
+ * Falls back to `fallback` (the raw EDGAR filer field) when it doesn't match.
+ */
+export function filerFromTitle(title, fallback) {
+  const m = ACTOR_RE.exec(title || "");
+  return (m && m[1].trim()) || fallback;
+}

@@ -11,6 +11,10 @@ short, fact-checked news briefs, published as a static Astro site on GitHub Page
 Pipeline: `fetch → write → qa → publish` (`agents/orchestrator.py`). `fetch` and
 `publish` are plain deterministic code; `write` and `qa` are the LLM agents.
 
+`agents/weekly_agent.py` builds the weekly Top-10 round-up (spec content
+template 2) from already-published briefs — deterministic, no API key. Output:
+`site/src/content/weekly/*.md` (its own Astro collection, `/weekly/` routes).
+
 ## Commands
 
 ```bash
@@ -36,6 +40,7 @@ npm ci && npm run build        # -> site/dist/ ; also `npm run dev`
 - `.github/workflows/daily_pipeline.yml` — runs the pipeline daily, commits new
   articles, builds `site/` and deploys to Pages (one job, then a `deploy` job).
   `deploy-site.yml` — redeploys the site on push to `site/**` (no pipeline).
+  `weekly_summary.yml` — Saturday cron: `weekly_agent`, commit, build, deploy.
   `ci.yml` — tests + build on code changes.
 
 ## Gotchas

@@ -1,0 +1,75 @@
+name: Weekly insider-trade summary
+
+# Builds the weekly Top-10 round-up (spec content template 2) from
+# already-published briefs and deploys it. Deterministic — no API key needed.
+# Runs Saturday morning US Eastern, after the week's Friday filings have landed.
+on:
+  schedule:
+    - cron: "0 13 * * 6" # Sat 13:00 UTC ~= 09:00 ET
+  workflow_dispatch:
+    inputs:
+      week_ending:
+        description: "Week ending YYYY-MM-DD (blank = today UTC)"
+        required: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Build weekly summary
+        run: |
+          python -m agents.weekly_agent \
+            --week-ending "${{ github.event.inputs.week_ending }}"
+
+      - name: Commit summary
+        run: |
+          git config user.name  "insider-tracker-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add site/src/content/weekly
+          if git diff --cached --quiet; then
+            echo "No weekly summary changes."
+          else
+            git commit -m "Weekly summary ($(date -u +%F))"
+            git push
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Build site
+        working-directory: site
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: run
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

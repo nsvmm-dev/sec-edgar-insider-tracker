@@ -20,4 +20,16 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+// Weekly Top-N round-up, written by agents/weekly_agent.py.
+const weekly = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    week_start: z.string(),
+    week_end: z.string(),
+    count: z.number().optional(),
+    generated: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, weekly };

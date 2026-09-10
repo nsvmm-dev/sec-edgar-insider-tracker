@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { SITE_NAME } from "../../consts.js";
+
+export async function getStaticPaths() {
+  const items = await getCollection("weekly");
+  return items.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+const description = `The largest S&P 500 insider trades from ${d.week_start} to ${d.week_end}, ranked by value.`;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline: d.title,
+  description,
+  datePublished: d.week_end,
+  dateModified: d.generated ?? d.week_end,
+  mainEntityOfPage: url,
+  url,
+  author: { "@type": "Organization", name: SITE_NAME },
+  publisher: {
+    "@type": "Organization",
+    name: SITE_NAME,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.svg", Astro.site).href,
+    },
+  },
+};
+---
+
+<Base title={d.title} description={description} jsonLd={jsonLd}>
+  <article class="prose">
+    <h1>{d.title}</h1>
+    <p class="muted">Week of {d.week_start} – {d.week_end}</p>
+    <Content />
+  </article>
+  <p class="muted" style="margin-top:2rem">
+    <a href="/weekly/">← All weekly summaries</a> · <a href="/">Latest trades</a>
+  </p>
+</Base>
