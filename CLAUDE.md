@@ -35,6 +35,7 @@ npm ci && npm run build        # -> site/dist/ ; also `npm run dev`
 - `output/<date>/` — per-day working files (git-ignored).
 - `.github/workflows/daily_pipeline.yml` — runs the pipeline daily, commits new
   articles, builds `site/` and deploys to Pages (one job, then a `deploy` job).
+  `deploy-site.yml` — redeploys the site on push to `site/**` (no pipeline).
   `ci.yml` — tests + build on code changes.
 
 ## Gotchas

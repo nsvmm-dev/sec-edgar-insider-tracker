@@ -1,0 +1,50 @@
+name: Deploy site
+
+# Redeploy the static site when its source changes on main, without re-running
+# the (LLM-costly) fetch/write/qa/publish pipeline. The daily pipeline does its
+# own build+deploy after it publishes new articles; that commit is made with
+# GITHUB_TOKEN and does not trigger this workflow, so the two never overlap.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-site.yml"
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Build site
+        working-directory: site
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
