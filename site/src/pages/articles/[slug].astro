@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import { SITE_NAME } from "../../consts.js";
+import { titleCaseCompany } from "../../lib/format.js";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles");
@@ -14,17 +16,43 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 const d = entry.data;
 
+const company = titleCaseCompany(d.company) ?? d.company;
 const verb = d.transaction_type === "purchase" ? "bought" : "sold";
-const description = d.filer
-  ? `${d.filer} ${verb} ${d.company ?? ""} (${d.ticker ?? ""}) stock on ${d.date}, per an SEC Form 4 filing.`
+// The headline carries a properly-cased name ("<Name> (<Title>) Buys ...");
+// prefer it over the raw ALL-CAPS `filer` field from EDGAR.
+const filer = d.title?.includes(" (") ? d.title.split(" (")[0] : d.filer;
+const description = filer
+  ? `${filer} ${verb} ${company ?? ""} (${d.ticker ?? ""}) stock on ${d.date}, per an SEC Form 4 filing.`
   : undefined;
+
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline: d.title,
+  description,
+  datePublished: d.date,
+  dateModified: d.date,
+  mainEntityOfPage: url,
+  url,
+  isBasedOn: d.source_url,
+  author: { "@type": "Organization", name: SITE_NAME },
+  publisher: {
+    "@type": "Organization",
+    name: SITE_NAME,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.svg", Astro.site).href,
+    },
+  },
+};
 ---
 
-<Base title={d.title} description={description}>
+<Base title={d.title} description={description} jsonLd={jsonLd}>
   <article class="prose">
     <h1>{d.title}</h1>
     <p class="muted">
-      {d.company} ({d.ticker}) · Transaction date {d.date}
+      {company} ({d.ticker}) · Transaction date {d.date}
     </p>
     <Content />
     <p class="source-note">
@@ -33,4 +61,5 @@ const description = d.filer
       >
     </p>
   </article>
+  <p class="muted" style="margin-top:2rem"><a href="/">← All insider trades</a></p>
 </Base>

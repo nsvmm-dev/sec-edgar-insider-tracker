@@ -44,6 +44,11 @@ npm ci && npm run build        # -> site/dist/ ; also `npm run dev`
   `entry.slug`. `write_agent.py` deliberately omits it.
 - **Sitemap/RSS are hand-rolled endpoints** (`site/src/pages/sitemap.xml.js`,
   `rss.xml.js`), not integrations — `@astrojs/sitemap` 3.7 needs Astro 5.
+- `site/src/consts.js` holds site name/description and `CF_ANALYTICS_TOKEN`
+  (Cloudflare Web Analytics beacon; empty = no beacon rendered).
+  `site/src/lib/format.js` `titleCaseCompany()` fixes ALL-CAPS EDGAR issuer
+  names for display only. Article pages emit `NewsArticle` JSON-LD via Base's
+  `jsonLd` prop.
 - **Deploy:** project repo `nsvmm-dev/sec-edgar-insider-tracker`, custom apex
   domain `decode-slang.com` (in `site/astro.config.mjs` `site:`,
   `site/public/CNAME`, `site/public/robots.txt`). No `base` path. Cloudflare DNS

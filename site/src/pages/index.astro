@@ -1,13 +1,22 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
+import { SITE_NAME, SITE_DESCRIPTION } from "../consts.js";
 
 const articles = (await getCollection("articles")).sort(
   (a, b) => Date.parse(b.data.date) - Date.parse(a.data.date),
 );
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  url: Astro.site?.href,
+};
 ---
 
-<Base title="Latest Insider Trades">
+<Base title="Latest Insider Trades" jsonLd={jsonLd}>
   <h1>Latest Insider Trades</h1>
   <p class="muted">
     Short, fact-checked briefs on S&P 500 insider transactions, built from SEC

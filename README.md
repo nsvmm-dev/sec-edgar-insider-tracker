@@ -136,6 +136,16 @@ workflow (a `GITHUB_TOKEN` push doesn't, by design).
 
 The sitemap (`/sitemap.xml`) and RSS feed (`/rss.xml`) are hand-rolled endpoints
 in `site/src/pages/`, not integrations, to avoid Astro-major-version coupling.
+Article pages carry `NewsArticle` JSON-LD.
+
+### Analytics (optional)
+
+Cloudflare Web Analytics (cookieless, no consent banner). In the Cloudflare
+dashboard: *decode-slang.com → Analytics & Logs → Web Analytics → Add a site*
+(manual), copy the token from the JS snippet, and paste it into
+`CF_ANALYTICS_TOKEN` in `site/src/consts.js`. The beacon only renders when that
+value is non-empty. (Automatic injection needs the domain proxied, which it
+isn't — the manual beacon works with DNS-only.)
 
 ---
 

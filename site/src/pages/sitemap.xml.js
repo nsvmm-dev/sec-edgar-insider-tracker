@@ -14,14 +14,22 @@ export async function GET(context) {
   const base = context.site.href.replace(/\/$/, "");
   const articles = await getCollection("articles");
 
-  const urls = [
-    ...STATIC_PATHS.map((p) => `${base}${p}`),
-    ...articles.map((a) => `${base}/articles/${a.slug}/`),
+  const entries = [
+    ...STATIC_PATHS.map((p) => ({ loc: `${base}${p}` })),
+    ...articles.map((a) => ({
+      loc: `${base}/articles/${a.slug}/`,
+      lastmod: a.data.date,
+    })),
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
+${entries
+  .map(
+    (e) =>
+      `  <url><loc>${e.loc}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ""}</url>`,
+  )
+  .join("\n")}
 </urlset>
 `;
 
