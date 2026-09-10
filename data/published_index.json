@@ -13,6 +13,48 @@
       "path": "G:\\マイドライブ\\Auto_Profit_24\\10_SEC_EDGAR_Sum\\site\\src\\content\\articles\\2026-09-01-aapl-sale-3d88e9a1.md",
       "published_at": "2026-09-08T13:28:40.041410+00:00",
       "filing_date": "2026-09-01"
+    },
+    "https://www.sec.gov/Archives/edgar/data/1571996/000119312526386858/0001193125-26-386858-index.htm": {
+      "slug": "2026-09-04-dell-sale-3ab2e3a0",
+      "title": "Silver Lake Partners IV, L.P. / Silver Lake Technology Associates IV, L.P. / SLTA IV (GP), L.L.C. / Silver Lake Group, L.L.C. / Durban Egon (Director, 10% Owner; Director) Sells $48.1 Million in Dell Technologies Inc. Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-dell-sale-3ab2e3a0.md",
+      "published_at": "2026-09-10T13:24:07.158753+00:00",
+      "filing_date": "2026-09-04"
+    },
+    "https://www.sec.gov/Archives/edgar/data/1571996/000119312526386868/0001193125-26-386868-index.htm": {
+      "slug": "2026-09-04-dell-sale-d5c76d62",
+      "title": "Silver Lake Partners V DE (AIV), L.P. / Silver Lake Technology Associates V, L.P. / SLTA V (GP), L.L.C. / Silver Lake Group, L.L.C. / Durban Egon (Director, 10% Owner; Director) Sells $14.96 million in Dell Technologies Inc. Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-dell-sale-d5c76d62.md",
+      "published_at": "2026-09-10T13:24:07.158936+00:00",
+      "filing_date": "2026-09-04"
+    },
+    "https://www.sec.gov/Archives/edgar/data/1571996/000119312526386860/0001193125-26-386860-index.htm": {
+      "slug": "2026-09-04-dell-sale-47f2119f",
+      "title": "Egon Durban (Director, 10% Owner) Sells $583,908 in Dell Technologies Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-dell-sale-47f2119f.md",
+      "published_at": "2026-09-10T13:24:07.159109+00:00",
+      "filing_date": "2026-09-04"
+    },
+    "https://www.sec.gov/Archives/edgar/data/1136869/000134667226000010/0001346672-26-000010-index.htm": {
+      "slug": "2026-09-04-zbh-sale-a225f869",
+      "title": "Chad F Phipps Sells $295,050 in Zimmer Biomet Holdings Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-zbh-sale-a225f869.md",
+      "published_at": "2026-09-10T13:24:07.159308+00:00",
+      "filing_date": "2026-09-04"
+    },
+    "https://www.sec.gov/Archives/edgar/data/1571996/000119312526386859/0001193125-26-386859-index.htm": {
+      "slug": "2026-09-04-dell-sale-471df585",
+      "title": "Egon Durban (Director) Sells $262,758 in Dell Technologies Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-dell-sale-471df585.md",
+      "published_at": "2026-09-10T13:24:07.159479+00:00",
+      "filing_date": "2026-09-04"
+    },
+    "https://www.sec.gov/Archives/edgar/data/829224/000082922426000135/0000829224-26-000135-index.htm": {
+      "slug": "2026-09-04-sbux-sale-809bd6e3",
+      "title": "Brady Brewer (CEO, International) Sells $235,382 in Starbucks Stock",
+      "path": "/home/runner/work/sec-edgar-insider-tracker/sec-edgar-insider-tracker/site/src/content/articles/2026-09-04-sbux-sale-809bd6e3.md",
+      "published_at": "2026-09-10T13:24:07.159634+00:00",
+      "filing_date": "2026-09-04"
     }
   }
 }
