@@ -1,17 +1,18 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE_NAME } from "../consts.js";
 ---
 
 <Base
   title="Disclosure"
-  description="Advertising, affiliate and editorial disclosure for Insider Trades."
+  description={`Advertising, affiliate and editorial disclosure for ${SITE_NAME}.`}
 >
   <div class="static-page">
     <h1>Disclosure</h1>
 
     <h2>No investment advice</h2>
     <p>
-      Insider Trades is a news and information site. Nothing on it is investment,
+      {SITE_NAME} is a news and information site. Nothing on it is investment,
       legal, tax or financial advice, or a recommendation to buy or sell any
       security. Insider transactions are disclosed for many reasons and do not
       indicate future stock performance. Always do your own research or consult a

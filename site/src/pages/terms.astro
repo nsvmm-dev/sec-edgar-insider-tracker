@@ -1,10 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE_NAME } from "../consts.js";
 ---
 
 <Base
   title="Terms of Use"
-  description="The terms that apply to your use of Insider Trades."
+  description={`The terms that apply to your use of ${SITE_NAME}.`}
 >
   <div class="static-page">
     <h1>Terms of Use</h1>

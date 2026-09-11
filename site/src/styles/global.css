@@ -58,9 +58,21 @@ a:hover {
   border-bottom: 1px solid var(--border);
 }
 .site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--fg);
+}
+.site-header .brand:hover {
+  text-decoration: none;
+}
+.brand-mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+  border-radius: 0.3rem;
 }
 .site-header nav a {
   color: var(--muted);

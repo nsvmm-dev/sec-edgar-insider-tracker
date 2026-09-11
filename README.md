@@ -1,7 +1,10 @@
 # SEC EDGAR Insider-Trading Tracker
 
 Automated pipeline that turns S&P 500 **Form 4** insider-transaction filings into
-short, fact-checked, plain-English news briefs for retail investors.
+short, fact-checked, plain-English news briefs for retail investors. Published
+as **TradeOwl** at [decode-slang.com](https://decode-slang.com) (the repo/project
+keeps its descriptive engineering name; `SITE_NAME` in `site/src/consts.js` is
+the public brand).
 
 Full product spec: [`A_sec-edgar-insider-tracker_spec.md`](A_sec-edgar-insider-tracker_spec.md).
 This README covers the implementation and how to run it.

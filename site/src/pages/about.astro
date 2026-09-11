@@ -1,16 +1,17 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE_NAME } from "../consts.js";
 ---
 
 <Base
   title="About"
-  description="What Insider Trades is, where its data comes from, and how it is produced."
+  description={`What ${SITE_NAME} is, where its data comes from, and how it is produced.`}
 >
   <div class="static-page">
     <h1>About</h1>
 
     <p>
-      <strong>Insider Trades</strong> publishes short, plain-English news briefs
+      <strong>{SITE_NAME}</strong> publishes short, plain-English news briefs
       about insider transactions at S&P 500 companies. Each brief is built from a
       single <a
         href="https://www.sec.gov/about/forms/form4data.pdf"

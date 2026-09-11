@@ -1,17 +1,18 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE_NAME } from "../consts.js";
 ---
 
 <Base
   title="Privacy Policy"
-  description="What data Insider Trades does and does not collect."
+  description={`What data ${SITE_NAME} does and does not collect.`}
 >
   <div class="static-page">
     <h1>Privacy Policy</h1>
     <p class="muted">Last updated: 2026</p>
 
     <p>
-      Insider Trades is a static website. It has no user accounts, login, or
+      {SITE_NAME} is a static website. It has no user accounts, login, or
       comment system, and it does not ask you for personal information.
     </p>
 

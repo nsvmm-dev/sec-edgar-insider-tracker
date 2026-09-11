@@ -1,10 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE_NAME } from "../consts.js";
 ---
 
 <Base
   title="Contact"
-  description="How to reach Insider Trades — corrections, removal requests, and general enquiries."
+  description={`How to reach ${SITE_NAME} — corrections, removal requests, and general enquiries.`}
 >
   <div class="static-page">
     <h1>Contact</h1>
