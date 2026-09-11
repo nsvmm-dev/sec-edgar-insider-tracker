@@ -15,14 +15,14 @@ export async function GET(context) {
       const filer = filerFromTitle(a.data.title, a.data.filer);
       return {
         title: a.data.title,
-        link: `/articles/${a.slug}/`,
+        link: `/articles/${a.id}/`,
         pubDate: new Date(a.data.date),
         description: `${filer ?? ""} — ${titleCaseCompany(a.data.company) ?? ""} (${a.data.ticker ?? ""})`,
       };
     }),
     ...weekly.map((w) => ({
       title: w.data.title,
-      link: `/weekly/${w.slug}/`,
+      link: `/weekly/${w.id}/`,
       pubDate: new Date(w.data.generated ?? w.data.week_end),
       description: `Weekly round-up: the biggest S&P 500 insider trades, ${w.data.week_start} to ${w.data.week_end}.`,
     })),

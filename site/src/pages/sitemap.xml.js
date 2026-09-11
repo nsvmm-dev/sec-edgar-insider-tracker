@@ -21,11 +21,11 @@ export async function GET(context) {
   const entries = [
     ...STATIC_PATHS.map((p) => ({ loc: `${base}${p}` })),
     ...articles.map((a) => ({
-      loc: `${base}/articles/${a.slug}/`,
+      loc: `${base}/articles/${a.id}/`,
       lastmod: a.data.date,
     })),
     ...weekly.map((w) => ({
-      loc: `${base}/weekly/${w.slug}/`,
+      loc: `${base}/weekly/${w.id}/`,
       lastmod: w.data.week_end,
     })),
   ];
