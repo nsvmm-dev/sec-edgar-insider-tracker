@@ -53,6 +53,12 @@ npm ci && npm run build        # -> site/dist/ ; also `npm run dev`
   (not `src/content/config.ts`) and use a `glob()` loader. Templates use
   `entry.id` (not `.slug`) and `render(entry)` imported from `astro:content`
   (not `entry.render()`).
+- **Astro 7 requires Node.js >= 22.12.0** (`site/package.json` `engines`). Every
+  workflow's `setup-node` step must use `node-version: "22"` — Node 20 fails
+  `astro build` outright. This bit us once: the migration was verified with a
+  local Node 24, and CI's `node-version: "20"` silently broke `Deploy site`
+  (`build` failed -> `deploy` showed as "skipped", not "failed", so it looked
+  green in the workflow list) until caught and fixed.
 - **Sitemap/RSS are hand-rolled endpoints** (`site/src/pages/sitemap.xml.js`,
   `rss.xml.js`), not integrations — avoids coupling to a specific Astro major.
 - `site/src/consts.js` holds site name/description and `CF_ANALYTICS_TOKEN`
