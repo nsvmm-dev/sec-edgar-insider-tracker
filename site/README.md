@@ -11,6 +11,10 @@ npm run dev      # local preview
 npm run build    # -> site/dist/ (uploaded to Pages by the workflow)
 ```
 
+Requires **Node.js >= 22.12.0** (Astro 7 hard-fails on older Node — `engines`
+in `package.json`). All four GitHub Actions workflows that build the site pin
+`node-version: "22"`.
+
 - Articles are Markdown files in `src/content/articles/`, weekly round-ups in
   `src/content/weekly/`, both written by the agents. Collection schemas:
   `src/content.config.ts` (Astro 7 Content Layer API — `glob()` loaders,

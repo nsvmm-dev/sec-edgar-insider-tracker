@@ -40,6 +40,10 @@ py -m pip install -r requirements.txt      # Windows: use `py`; elsewhere `pytho
 cp .env.example .env                        # then edit .env
 ```
 
+The site (`site/`) needs **Node.js >= 22.12.0** — Astro 7 refuses to build on
+older Node (see `site/package.json` `engines`). `npm ci && npm run build` from
+`site/`; see `site/README.md`.
+
 Required in `.env`:
 
 - `ANTHROPIC_API_KEY` — for the write/QA agents.
