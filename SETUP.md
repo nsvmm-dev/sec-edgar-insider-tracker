@@ -1,6 +1,6 @@
 # SETUP — 残タスク・検討事項
 
-最終更新: 2026-09-12
+最終更新: 2026-09-12（A章 完了）
 本番サイト: https://decode-slang.com
 リポジトリ: https://github.com/nsvmm-dev/sec-edgar-insider-tracker
 ロゴ・コンセプトボード: https://claude.ai/code/artifact/89bae752-8c53-4756-a44b-5c514133e4dc
@@ -11,17 +11,17 @@
 
 ## A. すぐにやること
 
-- [ ] **A-1. ロゴ・コンセプトボードの更新**
-  公開済みのボードがまだ「TradeOwl」のまま。EdgarHawk のタカのアイコンで作り直す。（担当: Claude）
+- [x] **A-1. ロゴ・コンセプトボードの更新**
+  EdgarHawk のタカのアイコンで作り直し、同じ URL に再公開済み。（担当: Claude）
 
-- [ ] **A-2. Dependabot PR #7（Astro 4→7.3.1）の後始末**
-  Astro 7 移行は手動で完了済み（コミット `1bb9772`〜）なのでこの PR は重複。手順は下記「A-2 詳細手順」参照。（担当: あなた）
+- [x] **A-2. Dependabot PR #7（Astro 4→7.3.1）の後始末**
+  クローズ済みを確認（Dependabot が重複を検知して自動クローズ）。（担当: あなた）
 
-- [ ] **A-3. Cloudflare Web Analytics でデータが実際に入っているか確認**
-  手順は下記「A-3 詳細手順」参照。（担当: あなた）
+- [x] **A-3. Cloudflare Web Analytics でデータが実際に入っているか確認**
+  4件のPVを確認 — 正常に計測されている。（担当: あなた）
 
-- [ ] **A-4. README のセットアップ手順に Node.js バージョン要件を明記**
-  現状 `CLAUDE.md` にしか書いていない（`>=22.12.0`、Astro 7 の必須要件）。（担当: Claude）
+- [x] **A-4. README のセットアップ手順に Node.js バージョン要件を明記**
+  `README.md` と `site/README.md` の両方に追記済み。（担当: Claude）
 
 ### A-2 詳細手順：Dependabot PR #7 のクローズ
 
