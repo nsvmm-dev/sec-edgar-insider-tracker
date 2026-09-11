@@ -2,7 +2,7 @@
 
 Automated pipeline that turns S&P 500 **Form 4** insider-transaction filings into
 short, fact-checked, plain-English news briefs for retail investors. Published
-as **TradeOwl** at [decode-slang.com](https://decode-slang.com) (the repo/project
+as **EdgarHawk** at [decode-slang.com](https://decode-slang.com) (the repo/project
 keeps its descriptive engineering name; `SITE_NAME` in `site/src/consts.js` is
 the public brand).
 

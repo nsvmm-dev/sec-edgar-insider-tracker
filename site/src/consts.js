@@ -1,4 +1,4 @@
-export const SITE_NAME = "TradeOwl";
+export const SITE_NAME = "EdgarHawk";
 export const SITE_DESCRIPTION =
   "Plain-English news briefs on S&P 500 insider transactions (SEC Form 4).";
 
