@@ -1,8 +1,10 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
 
 // Matches the front matter written by agents/write_agent.py.
 const articles = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
   schema: z.object({
     title: z.string(),
     date: z.string(), // YYYY-MM-DD (transaction date)
@@ -22,7 +24,7 @@ const articles = defineCollection({
 
 // Weekly Top-N round-up, written by agents/weekly_agent.py.
 const weekly = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/weekly" }),
   schema: z.object({
     title: z.string(),
     week_start: z.string(),

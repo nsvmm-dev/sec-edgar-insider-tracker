@@ -11,10 +11,11 @@ npm run dev      # local preview
 npm run build    # -> site/dist/ (uploaded to Pages by the workflow)
 ```
 
-- Articles are Markdown files in `src/content/articles/`, written by
-  `agents/publish_agent.py`. Front-matter schema: `src/content/config.ts`.
-  There is **no `slug` front-matter field** — Astro reserves it; the slug is
-  derived from the filename (`<slug>.md`).
+- Articles are Markdown files in `src/content/articles/`, weekly round-ups in
+  `src/content/weekly/`, both written by the agents. Collection schemas:
+  `src/content.config.ts` (Astro 7 Content Layer API — `glob()` loaders,
+  `entry.id`, `render(entry)`). There is **no `slug` front-matter field** —
+  Astro reserves it; the slug is derived from the filename (`<slug>.md`).
 - `src/pages/sitemap.xml.js` and `src/pages/rss.xml.js` are hand-rolled
   endpoints (`/sitemap.xml`, `/rss.xml`). `robots.txt` and `favicon.svg` are in
   `public/`.
@@ -26,5 +27,5 @@ npm run build    # -> site/dist/ (uploaded to Pages by the workflow)
 - Affiliate placement (brokerage sign-up links) belongs in the layout
   sidebar/footer, not the article bodies (spec section 8).
 
-Still bare: visual styling, the weekly-summary template, and affiliate slots are
-follow-up work.
+Affiliate slots are still follow-up work (spec §8: sidebar/footer only, never
+the article body).

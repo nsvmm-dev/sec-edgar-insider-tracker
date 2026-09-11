@@ -47,9 +47,14 @@ npm ci && npm run build        # -> site/dist/ ; also `npm run dev`
 
 - **No `slug` in article front matter.** Astro reserves it
   (`ContentSchemaContainsSlugError`). The slug is the filename; templates use
-  `entry.slug`. `write_agent.py` deliberately omits it.
+  `entry.id` (Content Layer API — see below). `write_agent.py` deliberately
+  omits it.
+- **Astro 7, Content Layer API.** Collections live in `site/src/content.config.ts`
+  (not `src/content/config.ts`) and use a `glob()` loader. Templates use
+  `entry.id` (not `.slug`) and `render(entry)` imported from `astro:content`
+  (not `entry.render()`).
 - **Sitemap/RSS are hand-rolled endpoints** (`site/src/pages/sitemap.xml.js`,
-  `rss.xml.js`), not integrations — `@astrojs/sitemap` 3.7 needs Astro 5.
+  `rss.xml.js`), not integrations — avoids coupling to a specific Astro major.
 - `site/src/consts.js` holds site name/description and `CF_ANALYTICS_TOKEN`
   (Cloudflare Web Analytics beacon; empty = no beacon rendered).
   `site/src/lib/format.js` `titleCaseCompany()` fixes ALL-CAPS EDGAR issuer
