@@ -1,6 +1,11 @@
 ---
 import "../styles/global.css";
-import { SITE_NAME, SITE_DESCRIPTION, CF_ANALYTICS_TOKEN } from "../consts.js";
+import {
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  CF_ANALYTICS_TOKEN,
+  ADSENSE_PUBLISHER_ID,
+} from "../consts.js";
 
 const { title, description = SITE_DESCRIPTION, jsonLd } = Astro.props;
 
@@ -22,6 +27,11 @@ const year = new Date().getFullYear();
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#1E2A38" />
+    {
+      ADSENSE_PUBLISHER_ID && (
+        <meta name="google-adsense-account" content={ADSENSE_PUBLISHER_ID} />
+      )
+    }
     <link
       rel="alternate"
       type="application/rss+xml"
