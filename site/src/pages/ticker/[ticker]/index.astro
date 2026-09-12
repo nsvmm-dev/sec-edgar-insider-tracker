@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import { SITE_NAME } from "../../../consts.js";
+import { titleCaseCompany } from "../../../lib/format.js";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+  const byTicker = new Map();
+  for (const a of articles) {
+    const t = a.data.ticker;
+    if (!t) continue;
+    if (!byTicker.has(t)) byTicker.set(t, []);
+    byTicker.get(t).push(a);
+  }
+  return Array.from(byTicker.entries()).map(([ticker, items]) => ({
+    params: { ticker: ticker.toLowerCase() },
+    props: {
+      ticker,
+      items: items.sort((a, b) => Date.parse(b.data.date) - Date.parse(a.data.date)),
+    },
+  }));
+}
+
+const { ticker, items } = Astro.props;
+const company = titleCaseCompany(items[0]?.data.company) ?? ticker;
+const description = `${items.length} insider-trading ${items.length === 1 ? "brief" : "briefs"} for ${company} (${ticker}), from SEC Form 4 filings.`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${company} (${ticker}) — Insider Trades · ${SITE_NAME}`,
+  description,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+};
+---
+
+<Base title={`${company} (${ticker})`} description={description} jsonLd={jsonLd}>
+  <h1>{company} <span class="muted">({ticker})</span></h1>
+  <p class="muted">
+    {items.length} insider-trading {items.length === 1 ? "brief" : "briefs"} tracked for
+    this company.
+  </p>
+
+  <ul class="article-list">
+    {
+      items.map((a) => (
+        <li>
+          <a class="title" href={`/articles/${a.id}/`}>
+            {a.data.title}
+          </a>
+          <div class="muted">{a.data.date}</div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="muted" style="margin-top:2rem">
+    <a href="/ticker/">← All companies</a> · <a href="/">Latest trades</a>
+  </p>
+</Base>

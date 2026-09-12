@@ -33,7 +33,11 @@ const jsonLd = {
             {a.data.title}
           </a>
           <div class="muted">
-            {[a.data.ticker, a.data.date].filter(Boolean).join(" · ")}
+            {a.data.ticker && (
+              <a href={`/ticker/${a.data.ticker.toLowerCase()}/`}>{a.data.ticker}</a>
+            )}
+            {a.data.ticker && a.data.date && " · "}
+            {a.data.date}
           </div>
         </li>
       ))

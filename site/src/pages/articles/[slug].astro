@@ -25,6 +25,14 @@ const description = filer
   ? `${filer} ${verb} ${company ?? ""} (${d.ticker ?? ""}) stock on ${d.date}, per an SEC Form 4 filing.`
   : undefined;
 
+const tickerHref = d.ticker ? `/ticker/${d.ticker.toLowerCase()}/` : undefined;
+
+const usd = (n, decimals = 0) =>
+  `$${Number(n).toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })}`;
+
 const url = new URL(Astro.url.pathname, Astro.site).href;
 const jsonLd = {
   "@context": "https://schema.org",
@@ -52,8 +60,46 @@ const jsonLd = {
   <article class="prose">
     <h1>{d.title}</h1>
     <p class="muted">
-      {company} ({d.ticker}) · Transaction date {d.date}
+      {company}{" "}
+      {tickerHref ? <a href={tickerHref}>({d.ticker})</a> : d.ticker && `(${d.ticker})`}
+      {" "}· Transaction date {d.date}
     </p>
+
+    <dl class="fact-table">
+      {filer && (
+        <>
+          <dt>Filer</dt>
+          <dd>{filer}{d.filer_title ? ` — ${d.filer_title}` : ""}</dd>
+        </>
+      )}
+      {d.transaction_type && (
+        <>
+          <dt>Transaction</dt>
+          <dd>{d.transaction_type === "purchase" ? "Purchase" : "Sale"}</dd>
+        </>
+      )}
+      {d.shares != null && (
+        <>
+          <dt>Shares</dt>
+          <dd>{Number(d.shares).toLocaleString("en-US")}</dd>
+        </>
+      )}
+      {d.price_per_share != null && (
+        <>
+          <dt>Price / share</dt>
+          <dd>{usd(d.price_per_share, 2)}</dd>
+        </>
+      )}
+      {d.total_value != null && (
+        <>
+          <dt>Total value</dt>
+          <dd>{usd(Math.round(d.total_value))}</dd>
+        </>
+      )}
+      <dt>Date</dt>
+      <dd>{d.date}</dd>
+    </dl>
+
     <Content />
     <p class="source-note">
       Source: <a href={d.source_url} rel="nofollow noopener" target="_blank"

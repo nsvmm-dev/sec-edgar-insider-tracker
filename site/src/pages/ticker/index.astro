@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { SITE_NAME } from "../../consts.js";
+import { titleCaseCompany } from "../../lib/format.js";
+
+const articles = await getCollection("articles");
+const byTicker = new Map();
+for (const a of articles) {
+  const t = a.data.ticker;
+  if (!t) continue;
+  if (!byTicker.has(t)) {
+    byTicker.set(t, { company: a.data.company, count: 0 });
+  }
+  byTicker.get(t).count += 1;
+}
+const companies = Array.from(byTicker.entries())
+  .map(([ticker, v]) => ({ ticker, company: titleCaseCompany(v.company), count: v.count }))
+  .sort((a, b) => a.ticker.localeCompare(b.ticker));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `Companies · ${SITE_NAME}`,
+  url: new URL("/ticker/", Astro.site).href,
+};
+---
+
+<Base
+  title="Companies"
+  description="Every S&P 500 company with a tracked insider-trading brief, by ticker."
+  jsonLd={jsonLd}
+>
+  <h1>Companies</h1>
+  <p class="muted">
+    Every company with at least one tracked insider transaction, A-Z by ticker.
+  </p>
+
+  {companies.length === 0 && <p class="muted">No companies tracked yet.</p>}
+
+  <ul class="article-list">
+    {
+      companies.map((c) => (
+        <li>
+          <a class="title" href={`/ticker/${c.ticker.toLowerCase()}/`}>
+            {c.company} ({c.ticker})
+          </a>
+          <div class="muted">
+            {c.count} {c.count === 1 ? "brief" : "briefs"}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

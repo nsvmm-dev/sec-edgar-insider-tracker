@@ -119,6 +119,26 @@ h2 {
   color: var(--accent);
 }
 
+.fact-table {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45rem 1.5rem;
+  margin: 1.1rem 0 1.75rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  font-size: 0.92rem;
+}
+.fact-table dt {
+  color: var(--muted);
+  font-weight: 500;
+}
+.fact-table dd {
+  margin: 0;
+  font-weight: 600;
+}
+
 article.prose p {
   margin: 1rem 0;
 }

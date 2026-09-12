@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 const STATIC_PATHS = [
   "/",
   "/weekly/",
+  "/ticker/",
   "/about/",
   "/disclosure/",
   "/privacy/",
@@ -18,6 +19,11 @@ export async function GET(context) {
     getCollection("weekly"),
   ]);
 
+  const tickers = new Set();
+  for (const a of articles) {
+    if (a.data.ticker) tickers.add(a.data.ticker.toLowerCase());
+  }
+
   const entries = [
     ...STATIC_PATHS.map((p) => ({ loc: `${base}${p}` })),
     ...articles.map((a) => ({
@@ -28,6 +34,7 @@ export async function GET(context) {
       loc: `${base}/weekly/${w.id}/`,
       lastmod: w.data.week_end,
     })),
+    ...Array.from(tickers).map((t) => ({ loc: `${base}/ticker/${t}/` })),
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
