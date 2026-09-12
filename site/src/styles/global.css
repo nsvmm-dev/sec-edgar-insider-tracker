@@ -1,25 +1,27 @@
 :root {
-  color-scheme: light dark;
-  --bg: #ffffff;
-  --fg: #1b1b1b;
-  --muted: #5c5c5c;
-  --border: #e4e4e4;
-  --accent: #14539a;
-  --card-bg: #fafafa;
-  --max: 44rem;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
-}
+  /* A deliberate single look (the approved "Aerial View" direction: cream
+     page, white shadowed cards, navy header) rather than a light/dark pair --
+     color-scheme is "light" only so the browser doesn't fight it with its
+     own dark UI chrome (scrollbars, form controls). */
+  color-scheme: light;
+  --bg: #faf8f5;
+  --fg: #1e2a38;
+  --muted: #6b6459;
+  --border: #e4dfd6;
+  --accent: #b4713a;
+  --card-bg: #ffffff;
+  --max: 46rem;
+  --font: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14161a;
-    --fg: #e7e7e7;
-    --muted: #9aa0a6;
-    --border: #2b2e34;
-    --accent: #74a9f2;
-    --card-bg: #1b1e23;
-  }
+  /* Fixed brand tokens -- not swapped by theme; the navy header/badges/tags
+     stay the same regardless of light/dark preference. */
+  --navy: #1e2a38;
+  --amber: #f2b134;
+  --orange: #e0592a;
+  --green: #4e8c63;
+  --deep-night: #14181d;
+  --paper: #faf8f5;
 }
 
 * {
@@ -47,52 +49,17 @@ a:hover {
   text-decoration: underline;
 }
 
-.site-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 1.1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-}
-.site-header .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--fg);
-}
-.site-header .brand:hover {
-  text-decoration: none;
-}
-.brand-mark {
-  width: 1.5rem;
-  height: 1.5rem;
-  flex: none;
-  border-radius: 0.3rem;
-}
-.site-header nav a {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-left: 1rem;
-}
-
-.wrap {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 1.5rem 1.25rem 3rem;
-}
-
 h1 {
-  font-size: 1.7rem;
-  line-height: 1.25;
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 1.9rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin: 1.25rem 0 0.5rem;
 }
 h2 {
   font-size: 1.2rem;
+  font-weight: 700;
   margin: 2rem 0 0.5rem;
 }
 
@@ -101,33 +68,234 @@ h2 {
   font-size: 0.88rem;
 }
 
-.article-list {
-  list-style: none;
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header: fixed navy band with a subtle contour-line texture, present on  */
+/* every page. Pages can fill the "hero" slot to extend it (homepage       */
+/* only) -- see Base.astro.                                                */
+/* ---------------------------------------------------------------------- */
+.site-header {
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+}
+.header-contour {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.header-top {
+  position: relative;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--paper);
+}
+.site-header .brand:hover {
+  text-decoration: none;
+}
+.brand-mark {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: none;
+}
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.site-header nav a {
+  color: rgba(250, 248, 245, 0.62);
+  font-size: 0.9rem;
+}
+.site-header nav a:hover {
+  color: var(--paper);
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .header-top {
+    flex-wrap: wrap;
+    row-gap: 0.6rem;
+  }
+  .site-header nav {
+    flex-basis: 100%;
+    gap: 0.15rem 0.85rem;
+    flex-wrap: wrap;
+  }
+  .site-header nav a {
+    font-size: 0.82rem;
+  }
+}
+
+.hero {
+  position: relative;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.hero h1 {
+  color: var(--paper);
+  font-size: 2.3rem;
+  margin: 0;
+}
+.hero p {
+  color: rgba(250, 248, 245, 0.65);
+  font-size: 1rem;
+  max-width: 36rem;
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.7rem;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Trade cards -- the article-list row, everywhere it appears.             */
+/* ---------------------------------------------------------------------- */
+.trade-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
   padding: 0;
   margin: 1.5rem 0 0;
+  list-style: none;
 }
-.article-list li {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border);
+.trade-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 6px 18px rgba(30, 42, 56, 0.08);
+  color: inherit;
+  text-decoration: none;
 }
-.article-list .title {
+.trade-card:hover {
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(30, 42, 56, 0.13);
+}
+.trade-card-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+.tag {
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.tag-sell {
+  color: var(--orange);
+  background: rgba(224, 89, 42, 0.14);
+  border-color: rgba(224, 89, 42, 0.35);
+}
+.tag-buy {
+  color: var(--green);
+  background: rgba(78, 140, 99, 0.14);
+  border-color: rgba(78, 140, 99, 0.35);
+}
+.tag-ticker {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--navy);
+  background: var(--amber);
+  border-radius: 8px;
+  padding: 0.32rem 0.55rem;
+}
+.trade-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-grow: 1;
+  min-width: 0;
+}
+.trade-card-title {
   font-weight: 600;
-  font-size: 1.06rem;
+  font-size: 1rem;
   color: var(--fg);
+  line-height: 1.35;
 }
-.article-list .title:hover {
-  color: var(--accent);
+.trade-card-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.trade-card-amount {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--fg);
+  flex: none;
+  text-align: right;
+}
+@media (max-width: 480px) {
+  .trade-card {
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+  .trade-card-title {
+    font-size: 0.92rem;
+  }
+}
+
+/* Simpler list card for pages that list things other than trades
+   (companies, weekly round-ups). */
+.list-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 6px 18px rgba(30, 42, 56, 0.08);
+  color: inherit;
+  text-decoration: none;
+}
+.list-card:hover {
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(30, 42, 56, 0.13);
+}
+.list-card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--fg);
 }
 
 .fact-table {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.45rem 1.5rem;
-  margin: 1.1rem 0 1.75rem;
-  padding: 0.9rem 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  gap: 0.5rem 1.5rem;
+  margin: 1.25rem 0 1.75rem;
+  padding: 1rem 1.25rem;
   background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(30, 42, 56, 0.08);
   font-size: 0.92rem;
 }
 .fact-table dt {

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
+import TradeCard from "../components/TradeCard.astro";
 import { SITE_NAME, SITE_DESCRIPTION } from "../consts.js";
 
 const articles = (await getCollection("articles")).sort(
@@ -17,28 +18,23 @@ const jsonLd = {
 ---
 
 <Base title="Latest Insider Trades" jsonLd={jsonLd}>
-  <h1>Latest Insider Trades</h1>
-  <p class="muted">
-    Short, fact-checked briefs on S&P 500 insider transactions, built from SEC
-    Form 4 filings.
-  </p>
+  <Fragment slot="hero">
+    <div class="hero">
+      <h1>Latest Insider Trades</h1>
+      <p>
+        Short, fact-checked briefs on S&amp;P 500 insider transactions, built
+        from SEC Form 4 filings.
+      </p>
+    </div>
+  </Fragment>
 
   {articles.length === 0 && <p class="muted">No articles published yet.</p>}
 
-  <ul class="article-list">
+  <ul class="trade-list">
     {
       articles.map((a) => (
         <li>
-          <a class="title" href={`/articles/${a.id}/`}>
-            {a.data.title}
-          </a>
-          <div class="muted">
-            {a.data.ticker && (
-              <a href={`/ticker/${a.data.ticker.toLowerCase()}/`}>{a.data.ticker}</a>
-            )}
-            {a.data.ticker && a.data.date && " · "}
-            {a.data.date}
-          </div>
+          <TradeCard article={a} />
         </li>
       ))
     }

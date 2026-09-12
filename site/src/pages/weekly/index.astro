@@ -27,16 +27,16 @@ const jsonLd = {
 
   {items.length === 0 && <p class="muted">No weekly summaries yet.</p>}
 
-  <ul class="article-list">
+  <ul class="trade-list">
     {
       items.map((w) => (
         <li>
-          <a class="title" href={`/weekly/${w.id}/`}>
-            {w.data.title}
+          <a class="list-card" href={`/weekly/${w.id}/`}>
+            <div class="list-card-title">{w.data.title}</div>
+            <div class="muted">
+              {w.data.week_start} – {w.data.week_end}
+            </div>
           </a>
-          <div class="muted">
-            {w.data.week_start} – {w.data.week_end}
-          </div>
         </li>
       ))
     }

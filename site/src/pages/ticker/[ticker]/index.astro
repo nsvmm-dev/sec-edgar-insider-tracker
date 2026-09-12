@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../../layouts/Base.astro";
+import TradeCard from "../../../components/TradeCard.astro";
 import { SITE_NAME } from "../../../consts.js";
 import { titleCaseCompany } from "../../../lib/format.js";
 
@@ -42,14 +43,11 @@ const jsonLd = {
     this company.
   </p>
 
-  <ul class="article-list">
+  <ul class="trade-list">
     {
       items.map((a) => (
         <li>
-          <a class="title" href={`/articles/${a.id}/`}>
-            {a.data.title}
-          </a>
-          <div class="muted">{a.data.date}</div>
+          <TradeCard article={a} />
         </li>
       ))
     }

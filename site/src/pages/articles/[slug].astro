@@ -59,10 +59,19 @@ const jsonLd = {
 <Base title={d.title} description={description} jsonLd={jsonLd}>
   <article class="prose">
     <h1>{d.title}</h1>
-    <p class="muted">
-      {company}{" "}
-      {tickerHref ? <a href={tickerHref}>({d.ticker})</a> : d.ticker && `(${d.ticker})`}
-      {" "}· Transaction date {d.date}
+    <p class="muted" style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+      {
+        d.transaction_type && (
+          <span class={`tag ${d.transaction_type === "purchase" ? "tag-buy" : "tag-sell"}`}>
+            {d.transaction_type === "purchase" ? "BUY" : "SELL"}
+          </span>
+        )
+      }
+      <span>
+        {company}{" "}
+        {tickerHref ? <a href={tickerHref}>({d.ticker})</a> : d.ticker && `(${d.ticker})`}
+        {" "}· Transaction date {d.date}
+      </span>
     </p>
 
     <dl class="fact-table">

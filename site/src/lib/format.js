@@ -52,3 +52,18 @@ export function filerFromTitle(title, fallback) {
   const m = ACTOR_RE.exec(title || "");
   return (m && m[1].trim()) || fallback;
 }
+
+/**
+ * Compact dollar amount for card/list display: "$48.1M", "$1.9M", "$295K".
+ * (The article page's own fact table uses full precision instead.)
+ */
+export function usdCompact(n) {
+  if (n == null) return null;
+  const v = Number(n);
+  if (!Number.isFinite(v)) return null;
+  if (v >= 1_000_000) {
+    return `$${(v / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  }
+  if (v >= 1_000) return `$${Math.round(v / 1000)}K`;
+  return `$${Math.round(v)}`;
+}

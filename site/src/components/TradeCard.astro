@@ -1,0 +1,31 @@
+---
+// One row of the trade list: BUY/SELL tag, ticker badge, headline, meta,
+// compact amount. Used by the homepage and by each company's ticker page.
+import { titleCaseCompany, usdCompact } from "../lib/format.js";
+
+const { article } = Astro.props;
+const d = article.data;
+const isBuy = d.transaction_type === "purchase";
+const amount = usdCompact(d.total_value);
+const company = titleCaseCompany(d.company);
+---
+
+<a class="trade-card" href={`/articles/${article.id}/`}>
+  <div class="trade-card-tags">
+    {
+      d.transaction_type && (
+        <span class={`tag ${isBuy ? "tag-buy" : "tag-sell"}`}>
+          {isBuy ? "BUY" : "SELL"}
+        </span>
+      )
+    }
+    {d.ticker && <span class="tag-ticker">{d.ticker}</span>}
+  </div>
+  <div class="trade-card-body">
+    <div class="trade-card-title">{d.title}</div>
+    <div class="trade-card-meta">
+      {[company, d.date].filter(Boolean).join(" · ")}
+    </div>
+  </div>
+  {amount && <div class="trade-card-amount">{amount}</div>}
+</a>

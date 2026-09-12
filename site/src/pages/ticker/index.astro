@@ -38,16 +38,18 @@ const jsonLd = {
 
   {companies.length === 0 && <p class="muted">No companies tracked yet.</p>}
 
-  <ul class="article-list">
+  <ul class="trade-list">
     {
       companies.map((c) => (
         <li>
-          <a class="title" href={`/ticker/${c.ticker.toLowerCase()}/`}>
-            {c.company} ({c.ticker})
+          <a class="list-card" href={`/ticker/${c.ticker.toLowerCase()}/`}>
+            <div class="list-card-title">
+              {c.company} ({c.ticker})
+            </div>
+            <div class="muted">
+              {c.count} {c.count === 1 ? "brief" : "briefs"}
+            </div>
           </a>
-          <div class="muted">
-            {c.count} {c.count === 1 ? "brief" : "briefs"}
-          </div>
         </li>
       ))
     }

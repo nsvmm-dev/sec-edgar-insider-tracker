@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import HeaderContour from "../components/HeaderContour.astro";
 import {
   SITE_NAME,
   SITE_DESCRIPTION,
@@ -27,6 +28,10 @@ const year = new Date().getFullYear();
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#1E2A38" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap"
+    />
     {
       ADSENSE_PUBLISHER_ID && (
         <meta name="google-adsense-account" content={ADSENSE_PUBLISHER_ID} />
@@ -71,25 +76,29 @@ const year = new Date().getFullYear();
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-          <circle cx="16" cy="17.28" r="9.92" fill="#f2b134"/>
-          <path d="M4.48 9.28 L13.44 13.12 L11.84 16 L2.88 12.16 Z" fill="#e0592a"/>
-          <path d="M27.52 9.28 L18.56 13.12 L20.16 16 L29.12 12.16 Z" fill="#e0592a"/>
-          <circle cx="11.52" cy="16.64" r="3.04" fill="#1e2a38"/>
-          <circle cx="20.48" cy="16.64" r="3.04" fill="#1e2a38"/>
-          <circle cx="12.32" cy="15.84" r="0.83" fill="#fff"/>
-          <circle cx="19.68" cy="15.84" r="0.83" fill="#fff"/>
-          <path d="M16 17.92 C13.6 17.92 12 19.36 12.16 21.12 C12.29 22.4 13.28 23.84 14.72 24.8 C15.52 25.28 15.68 25.92 16.64 25.44 C18.08 24.48 19.52 22.56 19.68 20.8 C19.84 19.2 18.4 17.92 16 17.92 Z" fill="#e0592a"/>
-        </svg>
-        {SITE_NAME}
-      </a>
-      <nav>
-        <a href="/">Latest</a>
-        <a href="/weekly/">Weekly</a>
-        <a href="/ticker/">Companies</a>
-        <a href="/about/">About</a>
-      </nav>
+      <HeaderContour />
+      <div class="header-top">
+        <a class="brand" href="/">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="17.28" r="9.92" fill="#f2b134"/>
+            <path d="M4.48 9.28 L13.44 13.12 L11.84 16 L2.88 12.16 Z" fill="#e0592a"/>
+            <path d="M27.52 9.28 L18.56 13.12 L20.16 16 L29.12 12.16 Z" fill="#e0592a"/>
+            <circle cx="11.52" cy="16.64" r="3.04" fill="#1e2a38"/>
+            <circle cx="20.48" cy="16.64" r="3.04" fill="#1e2a38"/>
+            <circle cx="12.32" cy="15.84" r="0.83" fill="#fff"/>
+            <circle cx="19.68" cy="15.84" r="0.83" fill="#fff"/>
+            <path d="M16 17.92 C13.6 17.92 12 19.36 12.16 21.12 C12.29 22.4 13.28 23.84 14.72 24.8 C15.52 25.28 15.68 25.92 16.64 25.44 C18.08 24.48 19.52 22.56 19.68 20.8 C19.84 19.2 18.4 17.92 16 17.92 Z" fill="#e0592a"/>
+          </svg>
+          {SITE_NAME}
+        </a>
+        <nav>
+          <a href="/">Latest</a>
+          <a href="/weekly/">Weekly</a>
+          <a href="/ticker/">Companies</a>
+          <a href="/about/">About</a>
+        </nav>
+      </div>
+      <slot name="hero" />
     </header>
 
     <main class="wrap">
