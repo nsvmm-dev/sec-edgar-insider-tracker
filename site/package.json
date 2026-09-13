@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "screenshot": "node scripts/screenshot.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
