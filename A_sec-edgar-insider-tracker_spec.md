@@ -80,14 +80,28 @@ licensed financial advisor before making investment decisions.
 
 ---
 
-## 4. サブエージェント構成
+## 4. サブエージェント構成(実装版)
 
-Claude Agent SDKで以下の役割を持つエージェントを実装する。各エージェントは独立したコンテキストで動作させる。
+> 当初案では全エージェントを Claude Agent SDK 上に実装する想定だったが、実装では
+> Anthropic Python SDK(Messages API、`agents/llm.py`)を直接呼び出すシンプルな
+> 構成にした。①データ取得・④公開・⑤週次サマリーは**決定的コードのみ(LLM不使用)**、
+> ②記事執筆・③QAの**2つだけ**が Claude を呼び出す。各呼び出しは会話履歴を持たない
+> 単発リクエスト(システムプロンプト+ユーザーメッセージ)とし、エージェント間で
+> コンテキストを共有しない設計は維持している。
 
-### ①データ取得エージェント
+### ①データ取得エージェント(`agents/fetch_agent.py` — 決定的コード、LLM不使用)
 ```
-役割: SEC EDGARのdaily-indexとForm 4詳細ページから、S&P 500対象企業の
-インサイダー取引データを取得し、構造化JSONを出力する。
+役割: S&P 500対象企業のForm 4(インサイダー取引報告書)を取得し、
+構造化JSONを出力する。
+
+実装は2戦略:
+- submissions(既定): S&P 500企業ごとに /submissions/CIK*.json を辿る。
+  1日あたりのリクエスト数が銘柄数(500社)で頭打ちになり、発行体が
+  自明という利点がある
+- daily-index: 本書2章の想定通り、当日の form.idx から Form 4 行を
+  抽出し、書類を1件ずつ開いてissuer CIKをS&P 500リストと突合する
+実際のHTTP取得・レート制御は agents/sec_client.py、Form 4 XMLの
+パースは agents/form4_parser.py が担当する。
 
 出力スキーマ:
 {
@@ -109,7 +123,7 @@ Claude Agent SDKで以下の役割を持つエージェントを実装する。�
 - S&P 500対象外の企業のデータは破棄する
 ```
 
-### ②記事執筆エージェント
+### ②記事執筆エージェント(`agents/write_agent.py` — Claude呼び出し)
 ```
 役割: データ取得エージェントの出力を基に、英語圏の一般投資家向けに
 平易な英語で記事を執筆する。
@@ -120,24 +134,28 @@ Claude Agent SDKで以下の役割を持つエージェントを実装する。�
   弱気相場を見越して等)を書かない。事実の提示に徹する
 - 断定的な投資判断を促す表現("buy now", "this means the stock will
   rise"等)は禁止
-- 記事末尾に、指定された免責事項の定型文を必ず含める
+- 免責事項の定型文はモデルには書かせず、コード側で必ず追記する
+  (常に一字一句同じ文言になるようにするため)
+- 長さは200〜400語。QA側の許容幅は200〜380語、プロンプト上の目標値は
+  260〜340語とし、QAで弾かれにくい範囲に収める
 - 出力はMarkdown形式
 ```
 
-### ③QAエージェント
+### ③QAエージェント(`agents/qa_agent.py` — 決定的チェック+Claude呼び出し)
 ```
 役割: 記事執筆エージェントの出力を、元データと突き合わせて検証する。
 
 チェック項目:
-1. 事実確認: 記事中の金額・株数・氏名・企業名がデータと完全に一致するか
-2. 投資助言表現チェック: 断定的な売買推奨表現が含まれていないか
-3. 免責事項: 定型文が正しく含まれているか
-4. ハルシネーション確認: データにない事実(推測含む)が書かれていないか
+1. 免責事項の有無、断定的投資助言表現の禁止ワード — 決定的コードで
+   先に機械チェック(モデルを呼ぶ前に弾ける不備はここで弾く)
+2. 事実確認: 記事中の金額・株数・氏名・企業名がデータと完全に一致するか — Claude
+3. ハルシネーション確認: データにない事実(推測含む)が書かれていないか — Claude
 
 出力: {"status": "approved" | "rejected", "issues": [...]}
+決定的チェックとモデルレビューの両方に合格した記事のみ approved とする。
 ```
 
-### ④公開エージェント
+### ④公開エージェント(`agents/publish_agent.py` — 決定的コード、LLM不使用)
 ```
 役割: QA承認済みの記事のみをサイトリポジトリにコミットし、
 デプロイパイプラインをトリガーする。
@@ -145,10 +163,24 @@ Claude Agent SDKで以下の役割を持つエージェントを実装する。�
 制約:
 - statusが"approved"でない記事は公開しない
 - 同一取引の重複公開を防ぐため、source_url(SEC書類URL)をユニークキー
-  として既存記事と照合する
+  として data/published_index.json と照合する
 ```
 
-### ⑤SNS運用エージェント
+### ⑤週次サマリー(`agents/weekly_agent.py` — 決定的コード、LLM不使用/追加)
+```
+役割: コンテンツテンプレート2(週間サマリー、3章参照)に対応する
+エージェント。当初の4章案には無かったが、実装時に専用スクリプトとして
+追加した。
+
+処理内容: 直近7日間に既に公開済みの記事(front matterの値)の中から
+取引額上位10件を抽出し、ランキング形式の記事を1本
+site/src/content/weekly/ に書き出す。数値は全て公開済み記事からの
+転記のみで、モデル呼び出しは行わない(APIキー不要)。
+
+実行契機: .github/workflows/weekly_summary.yml(毎週土曜)
+```
+
+### ⑥SNS運用エージェント(`agents/social_agent.py` — Phase 3、日次/週次パイプライン未組み込み)
 ```
 役割: 公開記事から、取引額が特に大きい・著名企業であるなど
 話題性のある案件を抽出し、X(旧Twitter)向けの告知文を作成する。
@@ -156,63 +188,101 @@ Claude Agent SDKで以下の役割を持つエージェントを実装する。�
 制約:
 - 誇張表現("shocking", "huge red flag"等の煽り言葉)は避ける
 - 運用初期は下書きとして保存し、人が確認してから投稿する運用とする
+
+現状: スクリプトとしては実装済みだが、daily_pipeline / weekly_summary
+どちらのワークフローにも未組み込み。手動実行のみ。X アカウントは
+作成済み(有効化するかは要判断 — SETUP.md参照)。
 ```
 
-### ⑥ニュースレター配信エージェント
+### ⑦ニュースレター配信エージェント(`agents/newsletter_agent.py` — Phase 3、日次/週次パイプライン未組み込み)
 ```
 役割: その週に公開された記事を要約し、Beehiiv向けの週次ダイジェスト
-メールを作成する(下書き作成まで自動化、送信はBeehiiv Maxプラン導入
-まで手動確認)。
+メールを作成する(下書き作成のみ自動化)。
+
+現状: Beehiiv APIキーは取得済みだが、配信APIの利用にはMax/Enterprise
+プラン(月$96〜)が必要なため、当面は下書きを人が手動でコピー&ペースト
+して配信する運用に決定(自動送信への移行はプラン導入後に再検討)。
 ```
 
 ---
 
-## 5. 技術スタック
+## 5. 技術スタック(実装版)
 
 | レイヤー | 選定 |
 |---|---|
-| データ取得・エージェント実行基盤 | Claude API / Claude Agent SDK |
-| サイト構築 | Next.js または Astro(静的サイト生成) |
-| ホスティング | Vercel(無料枠) |
-| メール配信 | Beehiiv(無料Launchプランから開始) |
-| 自動実行 | GitHub Actions(日次cron、米国市場クローズ後に実行) |
-| S&P 500構成銘柄・CIKリストの管理 | リポジトリ内の静的JSONファイル(定期的な手動更新、または別途無料ソースからの自動同期を検討) |
+| データ取得・エージェント実行基盤 | Anthropic Python SDK(Claude Messages API)を直接呼び出し。Claude Agent SDK は不使用 |
+| サイト構築 | Astro(静的サイト生成、Content Layer API)。Next.jsは不採用 |
+| ホスティング | GitHub Pages(独自ドメイン `decode-slang.com`、Cloudflare DNS)。Vercelは不採用 |
+| メール配信 | Beehiiv(無料Launchプランのまま運用。配信APIはMax/Enterpriseプラン限定のため、送信は当面手動) |
+| 自動実行 | GitHub Actions — `daily_pipeline.yml`(日次: fetch→write→qa→publish→build→deploy)、`weekly_summary.yml`(毎週土曜: 週次サマリー生成→build→deploy)、`deploy-site.yml`(`site/**`変更時に再デプロイ)、`ci.yml`(PR/push時のテスト+ビルド) |
+| S&P 500構成銘柄・CIKリストの管理 | リポジトリ内の静的JSONファイル `data/sp500_ciks.json`(`data/build_sp500_ciks.py` で再生成) |
 
 ---
 
-## 6. フォルダ構成案
+## 6. フォルダ構成(実装版)
 
 ```
-/A (このプロジェクトのルート)
-  /agents/              各サブエージェントのプロンプト定義・実行スクリプト
-    fetch_agent.py (or .ts)
-    write_agent.py
-    qa_agent.py
-    publish_agent.py
-    social_agent.py
-    newsletter_agent.py
-    orchestrator.py     全体のパイプラインを順に実行するスクリプト
+/ (リポジトリルート)
+  /agents/
+    config.py            環境変数・パス設定
+    sec_client.py         SEC EDGARへのHTTPクライアント(レート制御込み)
+    form4_parser.py        daily-index / Form 4 XMLのパース
+    articles.py            スラグ生成・front matter組み立て等の共通処理
+    llm.py                Anthropic SDKのラッパー(complete_text/complete_json)
+    fetch_agent.py         ①データ取得(決定的コード)
+    write_agent.py         ②記事執筆(Claude呼び出し)
+    qa_agent.py             ③QA(決定的チェック+Claude呼び出し)
+    publish_agent.py        ④公開(決定的コード)
+    weekly_agent.py         ⑤週次サマリー(決定的コード)
+    social_agent.py         ⑥SNS下書き(Phase 3、未組み込み)
+    newsletter_agent.py     ⑦ニュースレター下書き(Phase 3、未組み込み)
+    orchestrator.py         fetch→write→qa→publishを日付単位で通しで実行
   /data/
-    sp500_ciks.json      S&P 500構成銘柄とCIKの対応表
-  /site/                 Next.js/Astroのサイト本体
+    sp500_ciks.json         S&P 500構成銘柄とCIKの対応表
+    published_index.json    公開済みfiling(source_url)の重複防止台帳
+  /site/                    Astro静的サイト本体
+    src/content/articles/   個別記事(Markdown、publish_agentが書き込む)
+    src/content/weekly/     週次サマリー記事(Markdown、weekly_agentが書き込む)
+  /output/<date>/           日次パイプラインの中間生成物(git管理外)
   /.github/workflows/
-    daily_pipeline.yml   GitHub Actionsのcron定義
-  README.md               本仕様書(このファイル)
+    daily_pipeline.yml
+    weekly_summary.yml
+    deploy-site.yml
+    ci.yml
+  /tests/                   test_*.py(pytest不使用、`py tests/test_x.py`で直接実行)
+  README.md / CLAUDE.md / A_sec-edgar-insider-tracker_spec.md
+  SETUP.md                  残タスク管理メモ
   .env.example
 ```
 
 ---
 
-## 7. 環境変数(.env.example に記載する項目)
+## 7. 環境変数(実装版 — 詳細は `.env.example` を参照)
 
 ```
+# Claude / Anthropic
 ANTHROPIC_API_KEY=
-SEC_USER_AGENT="InsiderTrackerBot contact@yoursite.com"
-BEEHIIV_API_KEY=
+ANTHROPIC_MODEL=claude-opus-5   # 高ボリューム運用時は claude-sonnet-5 へ切替でコスト削減可
+
+# SEC EDGAR
+SEC_USER_AGENT="InsiderTrackerBot you@example.com"
+SEC_REQUEST_DELAY_SEC=0.15
+
+# パイプライン動作
+MIN_TOTAL_VALUE_USD=100000
+OUTPUT_DIR=./output
+SITE_CONTENT_DIR=./site/src/content/articles
+SP500_CIKS_PATH=./data/sp500_ciks.json
+PUBLISHED_INDEX_PATH=./data/published_index.json
+
+# Phase 3+(Phase 1では未使用)
+BEEHIIV_API_KEY=          # 取得済みだが配信APIはMax/Enterpriseプラン限定
 BEEHIIV_PUBLICATION_ID=
-VERCEL_TOKEN=
-X_API_KEY=              # SNS自動投稿を実装する場合
+X_API_KEY=                # SNS自動投稿を実装する場合
 ```
+
+> `VERCEL_TOKEN` は当初案(Vercelホスティング)向けの項目だったが、実装では
+> GitHub Pagesを採用したため不要・削除済み。
 
 ---
 
