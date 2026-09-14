@@ -1,6 +1,6 @@
 # SETUP — 残タスク
 
-最終更新: 2026-09-13
+最終更新: 2026-09-14
 本番サイト: https://decode-slang.com
 リポジトリ: https://github.com/nsvmm-dev/sec-edgar-insider-tracker
 
@@ -11,7 +11,6 @@
 ## 継続監視（作業不要・時間経過で分かるもの）
 
 - [ ] **Phase 2 の1週間無人稼働確認**：平日の daily pipeline・土曜の weekly summary が今後もエラーなく回り続けるか（仕様§10の完了基準）
-- [ ] **Google Search Console のインデックス状況**：数日〜1-2週間でクロール・掲載状況を確認
 - [ ] **Dependabot PR は今後も定期的に出続ける**：都度 CI green を確認してマージ、メジャー更新だけは都度相談
 
 ## コンテンツ拡張（要判断・未着手）
